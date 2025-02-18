@@ -1,0 +1,37 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Discord Message Scheduler API",
+      "version": "1.0.0",
+      "description": "API para programar mensajes en Discord"
+    },
+    "paths": {
+      "/api/message": {
+        "post": {
+          "summary": "Crear un nuevo mensaje programado",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "content": {
+                      "type": "string"
+                    },
+                    "scheduledFor": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "channelId": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
