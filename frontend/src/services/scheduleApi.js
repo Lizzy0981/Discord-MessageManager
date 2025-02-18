@@ -1,27 +1,21 @@
-const API_URL = import.meta.env.VITE_API_URL;
-const CHANNEL_ID = import.meta.env.VITE_CHANNEL_ID;
-
 class ScheduleService {
   constructor() {
-    // Verificar que las variables de entorno están cargadas
-    console.log('API_URL:', API_URL);
-    console.log('CHANNEL_ID:', CHANNEL_ID);
+    this.API_URL = import.meta.env.VITE_API_URL || '/api';
+    this.CHANNEL_ID = import.meta.env.VITE_CHANNEL_ID;
     
-    if (!API_URL) {
-      console.error('VITE_API_URL no está definida en el archivo .env');
-    }
-    if (!CHANNEL_ID) {
-      console.error('VITE_CHANNEL_ID no está definida en el archivo .env');
+    if (!this.CHANNEL_ID) {
+      console.error('VITE_CHANNEL_ID no está definida');
     }
   }
 
   async getScheduledMessages() {
     try {
-      const url = `${API_URL}/messages`;
+      const url = `${this.API_URL}/messages`;
       console.log('Fetching messages from:', url);
 
-      const response = await fetch(url);
-      console.log('Response:', response.status, response.statusText);
+      const response = await fetch(url, {
+        credentials: 'include'
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -30,7 +24,6 @@ class ScheduleService {
       }
 
       const data = await response.json();
-      console.log('Messages received:', data);
       return Array.isArray(data) ? data : [];
 
     } catch (error) {
@@ -41,11 +34,10 @@ class ScheduleService {
 
   async scheduleMessage(messageData) {
     try {
-      const url = `${API_URL}/message`;
+      const url = `${this.API_URL}/message`;
       console.log('Scheduling message at:', url);
-      console.log('Message data:', messageData);
 
-      if (!messageData.content) {
+      if (!messageData.content?.trim()) {
         throw new Error('El contenido del mensaje es requerido');
       }
 
@@ -54,13 +46,17 @@ class ScheduleService {
         throw new Error('Fecha inválida');
       }
 
+      if (scheduledDate < new Date()) {
+        throw new Error('La fecha debe ser futura');
+      }
+
       const formattedData = {
         content: messageData.content.trim(),
         scheduledFor: scheduledDate.toISOString(),
-        channelId: CHANNEL_ID
+        channelId: this.CHANNEL_ID
       };
 
-      console.log('Formatted data:', formattedData);
+      console.log('Sending formatted data:', formattedData);
 
       const response = await fetch(url, {
         method: 'POST',
@@ -68,19 +64,18 @@ class ScheduleService {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formattedData),
+        credentials: 'include'
       });
-
-      console.log('Schedule response:', response.status, response.statusText);
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error('Schedule error:', errorData);
+        console.error('Error response:', errorData);
         throw new Error(errorData.error || 'Error al programar mensaje');
       }
 
-      const data = await response.json();
-      console.log('Scheduled message response:', data);
-      return data;
+      const result = await response.json();
+      console.log('Schedule response:', result);
+      return result;
 
     } catch (error) {
       console.error('Error in scheduleMessage:', error);
@@ -94,18 +89,16 @@ class ScheduleService {
         throw new Error('ID del mensaje es requerido');
       }
 
-      const url = `${API_URL}/message/${messageId}`;
+      const url = `${this.API_URL}/message/${messageId}`;
       console.log('Deleting message:', url);
 
       const response = await fetch(url, {
         method: 'DELETE',
+        credentials: 'include'
       });
-
-      console.log('Delete response:', response.status, response.statusText);
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error('Delete error:', errorData);
         throw new Error(errorData.error || 'Error al eliminar mensaje');
       }
 
