@@ -75,7 +75,7 @@ pnpm run dev
 
 ## 🌐 Despliegue
 
-El proyecto está desplegado en Vercel. Visita: [Discord Message Manager](https://discord-message-manager.vercel.app)
+El proyecto está desplegado en Vercel. Visita: [Discord Message Manager](https://discord-message-manager-frontend.vercel.app/)
 
 ## 📄 Licencia
 
