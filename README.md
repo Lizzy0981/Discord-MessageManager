@@ -4,7 +4,10 @@ Un dashboard web para programar y gestionar mensajes en tu servidor de Discord.
 
 ## 📸 Imagen del Proyecto
 
-[Imagen aquí]
+![screencapture-localhost-5173-2025-02-17-23_09_37](https://github.com/user-attachments/assets/0d836f12-bd83-45b0-9fa3-3612c3db1094)
+
+
+
 
 ## ✨ Características
 
