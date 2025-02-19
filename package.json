@@ -2,27 +2,14 @@
   "name": "discord-messagemanager-root",
   "version": "1.0.0",
   "private": true,
-  "workspaces": [
-    "frontend",
-    "backend"
-  ],
   "scripts": {
     "dev": "concurrently \"npm run dev --workspace=frontend\" \"npm run dev --workspace=backend\"",
     "build": "npm run build --workspace=frontend",
+    "vercel-build": "npm run build",
     "start": "concurrently \"npm run preview --workspace=frontend\" \"npm run start --workspace=backend\"",
     "install:all": "npm install && npm install --workspace=frontend && npm install --workspace=backend"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
-  },
-  "dependencies": {
-    "framer-motion": "^12.4.3",
-    "sqlite": "^5.1.1",
-    "sqlite3": "^5.1.7"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "sqlite3"
-    ]
   }
 }
