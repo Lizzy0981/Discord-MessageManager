@@ -1,11 +1,14 @@
 class ScheduleService {
   constructor() {
-    this.API_URL = import.meta.env.VITE_API_URL || '/api';
-    this.CHANNEL_ID = import.meta.env.VITE_CHANNEL_ID;
-    
-    if (!this.CHANNEL_ID) {
-      console.error('VITE_CHANNEL_ID no está definida');
-    }
+      // En producción, usa la URL completa
+      this.API_URL = import.meta.env.NODE_ENV === 'production' 
+          ? `${window.location.origin}/api`
+          : import.meta.env.VITE_API_URL;
+          
+      this.CHANNEL_ID = import.meta.env.VITE_CHANNEL_ID;
+      
+      console.log('API_URL:', this.API_URL);
+      console.log('Environment:', import.meta.env.NODE_ENV);
   }
 
   async getScheduledMessages() {
